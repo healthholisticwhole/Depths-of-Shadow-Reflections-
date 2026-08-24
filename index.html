@@ -1,74 +1,202 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#17131d">
-<title>Depths of Shadow Reflections</title>
-<link rel="manifest" href="manifest.json">
-<style>
-:root{--bg:#110f15;--card:#1d1923;--ink:#f5eff7;--muted:#c9bdcc;--accent:#c8a6d7;--line:#403548}
-*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#110f15,#1a1420);color:var(--ink);min-height:100vh}
-main{max-width:760px;margin:auto;padding:28px 18px 60px}.hero{padding:38px 6px 22px}.eyebrow{letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-size:.78rem}
-h1{font-family:Georgia,serif;font-size:clamp(2.3rem,9vw,4.7rem);line-height:.96;margin:.35em 0}.lead{color:var(--muted);font-size:1.08rem;line-height:1.6}
-.grid{display:grid;gap:14px}.card{background:rgba(29,25,35,.94);border:1px solid var(--line);border-radius:22px;padding:20px}
-h2{font-family:Georgia,serif;margin:0 0 10px}button{border:0;border-radius:999px;padding:12px 17px;font-weight:700;background:var(--accent);color:#211827}
-.secondary{background:#302838;color:var(--ink)}textarea{width:100%;min-height:130px;background:#151119;color:var(--ink);border:1px solid var(--line);border-radius:15px;padding:14px;font:inherit;resize:vertical}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pill{background:#302838;border-radius:999px;padding:7px 11px;color:#eadfed;font-size:.9rem}
-.prompt{font-size:1.15rem;line-height:1.5;margin:12px 0 18px}.tiny{font-size:.8rem;color:#a99dab;line-height:1.5}.saved{color:#cde6c7;margin-left:8px}
-nav{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#151018" />
+  <meta name="description" content="Depths of Shadow Reflections — a guided self-reflection and shadow-work journal." />
+  <title>Depths of Shadow Reflections</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body><main>
-<section class="hero"><div class="eyebrow">A private space to meet yourself</div>
-<h1>Depths of Shadow Reflections</h1>
-<p class="lead">Explore the parts of yourself that are easy to hide, silence, judge, or protect. Move gently—from noticing, to naming, to understanding, to choosing.</p>
-<nav><button onclick="newPrompt()">Begin a reflection</button><button class="secondary" onclick="document.getElementById('ground').scrollIntoView()">Ground first</button></nav>
-</section>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand-kicker">Depths of Shadow Reflections</div>
+        <div class="brand-sub">A private space to meet yourself</div>
+      </div>
+      <button id="installBtn" class="ghost small" hidden>Install</button>
+    </header>
 
-<div class="grid">
-<section class="card">
-<div class="eyebrow">Today's reflection</div><h2>What wants to be understood?</h2>
-<div id="prompt" class="prompt"></div>
-<textarea id="journal" placeholder="Write without editing yourself. Your entry stays in this browser on this device."></textarea>
-<p><button onclick="saveEntry()">Save reflection</button><span id="saved" class="saved"></span></p>
-<p class="tiny">Privacy note: this prototype stores journal text locally in your browser using localStorage; it is not sent to a server by this app.</p>
-</section>
+    <main id="view"></main>
 
-<section class="card">
-<div class="eyebrow">Name it more precisely</div><h2>Expand the feeling</h2>
-<p class="lead">Instead of only “good,” “bad,” “angry,” or “sad,” try a closer word.</p>
-<div class="pills"><span class="pill">uneasy</span><span class="pill">dismissed</span><span class="pill">guarded</span><span class="pill">resentful</span><span class="pill">exposed</span><span class="pill">powerless</span><span class="pill">longing</span><span class="pill">relieved</span><span class="pill">tender</span><span class="pill">hopeful</span></div>
-</section>
+    <nav class="bottom-nav" aria-label="Primary">
+      <button data-view="home" class="nav-btn active">Home</button>
+      <button data-view="journey" class="nav-btn">Journey</button>
+      <button data-view="journal" class="nav-btn">Journal</button>
+      <button data-view="tools" class="nav-btn">Tools</button>
+      <button data-view="profile" class="nav-btn">Progress</button>
+    </nav>
+  </div>
 
-<section class="card" id="ground">
-<div class="eyebrow">Regulate before exploring</div><h2>60-second grounding</h2>
-<p class="prompt">Feel the support beneath your body. Look around and name 5 neutral things you can see. Notice 3 sounds. Let your exhale become a little longer than your inhale. Ask: “What would make this reflection feel 5% safer?”</p>
-</section>
+  <template id="homeTemplate">
+    <section class="hero">
+      <div class="eyebrow">Today</div>
+      <h1>Meet what is here.</h1>
+      <p class="lead">Notice without forcing. Name without judging. Understand without abandoning yourself.</p>
+      <div class="hero-actions">
+        <button class="primary" id="dailyPromptBtn">Begin today's reflection</button>
+        <button class="secondary" data-goto="grounding">Ground first</button>
+      </div>
+    </section>
 
-<section class="card">
-<div class="eyebrow">Boundaries & relational patterns</div><h2>Separate signal from pressure</h2>
-<p class="prompt">What do I actually think, feel, remember, want, or need when I temporarily set aside another person's approval, disappointment, urgency, blame, or expectations?</p>
-<p class="tiny">This tool is for reflection and education, not diagnosis, therapy, crisis care, or a substitute for professional advice.</p>
-</section>
+    <section class="grid two">
+      <article class="card">
+        <div class="card-label">Current journey</div>
+        <h2 id="homeJourneyTitle">30-Day Shadow Journey</h2>
+        <p id="homeJourneyProgress" class="muted"></p>
+        <div class="progress"><span id="homeJourneyBar"></span></div>
+        <button class="secondary wide" data-view-jump="journey">Continue journey</button>
+      </article>
 
-<section class="card">
-<div class="eyebrow">Integration</div><h2>Close with choice</h2>
-<p class="prompt">What is this part trying to protect? What does it need from my present-day self? What is one small action that honors the message without letting the reaction run my life?</p>
-</section>
-</div>
-</main>
-<script>
-const prompts=[
-"What trait in someone else activates me most—and where might I fear, reject, or suppress some version of it in myself?",
-"What do I work hardest to prove about myself? What am I afraid would be true if I stopped proving it?",
-"When I feel misunderstood, what story do I immediately tell myself about the other person—and about me?",
-"What emotion do I judge myself most harshly for feeling? What might that emotion be trying to communicate?",
-"Where am I saying yes while internally feeling no? What makes the no difficult to express?",
-"What part of me only appears when I feel threatened, criticized, excluded, controlled, or powerless? What is it protecting?",
-"What quality did I learn was unacceptable to show? How could I reclaim its healthy form?",
-"What am I ready to see with curiosity rather than shame?"
-];
-function newPrompt(){document.getElementById('prompt').textContent=prompts[Math.floor(Math.random()*prompts.length)];document.getElementById('saved').textContent='';}
-function saveEntry(){localStorage.setItem('shadowJournal',document.getElementById('journal').value);localStorage.setItem('shadowPrompt',document.getElementById('prompt').textContent);document.getElementById('saved').textContent='Saved on this device';}
-window.onload=()=>{newPrompt();let j=localStorage.getItem('shadowJournal');if(j)document.getElementById('journal').value=j;let p=localStorage.getItem('shadowPrompt');if(p)document.getElementById('prompt').textContent=p;}
-</script></body></html>
+      <article class="card">
+        <div class="card-label">Check-in</div>
+        <h2>What is strongest right now?</h2>
+        <div id="emotionQuick" class="chip-wrap"></div>
+        <p class="muted">Choose one word. Precision can soften overwhelm.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="card-label">Gentle prompt</div>
+      <h2 id="homePrompt"></h2>
+      <textarea id="homePromptText" placeholder="Write freely. Your entry stays on this device unless you choose to export it."></textarea>
+      <div class="row">
+        <button class="primary" id="saveHomePrompt">Save reflection</button>
+        <button class="ghost" id="shufflePrompt">New prompt</button>
+      </div>
+      <div id="homeSaveStatus" class="status"></div>
+    </section>
+
+    <section class="grid two">
+      <button class="feature-card" data-goto="triggers">
+        <span class="card-label">Pattern work</span>
+        <strong>Triggers & projections</strong>
+        <span>Separate activation from information.</span>
+      </button>
+      <button class="feature-card" data-goto="parts">
+        <span class="card-label">Inner dialogue</span>
+        <strong>Parts reflection</strong>
+        <span>Listen for what a protective part needs.</span>
+      </button>
+      <button class="feature-card" data-goto="boundaries">
+        <span class="card-label">Relational clarity</span>
+        <strong>Boundaries</strong>
+        <span>Find your own yes, no, maybe, and not now.</span>
+      </button>
+      <button class="feature-card" data-goto="feelings">
+        <span class="card-label">Emotional literacy</span>
+        <strong>Feelings vocabulary</strong>
+        <span>Move beyond “fine,” “bad,” or “angry.”</span>
+      </button>
+    </section>
+  </template>
+
+  <template id="journeyTemplate">
+    <section class="page-head">
+      <div class="eyebrow">Structured practice</div>
+      <h1>30-Day Shadow Journey</h1>
+      <p class="lead">A paced sequence from awareness to integration. You can move in order or revisit any day.</p>
+    </section>
+    <section class="card">
+      <div class="row between">
+        <div>
+          <div class="card-label">Progress</div>
+          <h2 id="journeyCount"></h2>
+        </div>
+        <button class="ghost small" id="resetJourney">Reset</button>
+      </div>
+      <div class="progress"><span id="journeyBar"></span></div>
+    </section>
+    <section id="journeyList" class="journey-list"></section>
+  </template>
+
+  <template id="journalTemplate">
+    <section class="page-head">
+      <div class="eyebrow">Your private record</div>
+      <h1>Journal</h1>
+      <p class="lead">Entries are saved in this browser on this device.</p>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <h2>New entry</h2>
+        <button class="ghost small" id="exportJournal">Export</button>
+      </div>
+      <input id="journalTitle" class="input" placeholder="Optional title" />
+      <textarea id="journalText" placeholder="What wants to be heard?"></textarea>
+      <div class="row">
+        <button class="primary" id="saveJournal">Save entry</button>
+        <button class="ghost" id="clearDraft">Clear</button>
+      </div>
+      <div id="journalStatus" class="status"></div>
+    </section>
+
+    <section>
+      <div class="section-title-row">
+        <h2>Saved entries</h2>
+        <span id="entryCount" class="muted"></span>
+      </div>
+      <div id="journalList" class="journal-list"></div>
+    </section>
+  </template>
+
+  <template id="toolsTemplate">
+    <section class="page-head">
+      <div class="eyebrow">Choose what you need</div>
+      <h1>Reflection tools</h1>
+      <p class="lead">Use one tool at a time. You do not have to “dig deeper” when your system needs rest.</p>
+    </section>
+
+    <section class="tool-grid">
+      <button class="feature-card" data-goto="grounding"><span class="card-label">Regulation</span><strong>Grounding</strong><span>Orient to the present before reflecting.</span></button>
+      <button class="feature-card" data-goto="feelings"><span class="card-label">Emotional literacy</span><strong>Feelings vocabulary</strong><span>Find a word that fits more precisely.</span></button>
+      <button class="feature-card" data-goto="triggers"><span class="card-label">Pattern work</span><strong>Triggers & projections</strong><span>Explore activation with curiosity.</span></button>
+      <button class="feature-card" data-goto="parts"><span class="card-label">Inner dialogue</span><strong>Parts reflection</strong><span>Meet protective responses without shame.</span></button>
+      <button class="feature-card" data-goto="boundaries"><span class="card-label">Relational clarity</span><strong>Boundaries</strong><span>Clarify preference, consent, limits, and choice.</span></button>
+      <button class="feature-card" data-goto="integration"><span class="card-label">Close the loop</span><strong>Integration</strong><span>Turn insight into one grounded next step.</span></button>
+    </section>
+  </template>
+
+  <template id="profileTemplate">
+    <section class="page-head">
+      <div class="eyebrow">Your pace, not perfection</div>
+      <h1>Progress</h1>
+      <p class="lead">A simple snapshot of your reflection practice on this device.</p>
+    </section>
+    <section class="stats-grid">
+      <article class="stat"><strong id="statEntries">0</strong><span>journal entries</span></article>
+      <article class="stat"><strong id="statDays">0</strong><span>journey days complete</span></article>
+      <article class="stat"><strong id="statFavorites">0</strong><span>favorite prompts</span></article>
+    </section>
+    <section class="card">
+      <div class="card-label">Recent emotional words</div>
+      <div id="recentEmotions" class="chip-wrap"></div>
+    </section>
+    <section class="card">
+      <h2>Privacy & data</h2>
+      <p class="muted">This version stores your journal, journey progress, favorites, and check-ins locally in your browser. Clearing browser storage can erase them.</p>
+      <div class="row wrap">
+        <button class="secondary" id="exportAll">Export my data</button>
+        <button class="danger" id="clearAll">Erase local data</button>
+      </div>
+    </section>
+    <section class="card subtle">
+      <h2>Important</h2>
+      <p class="muted">Depths of Shadow Reflections is an educational self-reflection tool. It does not diagnose, treat, or replace therapy, medical care, crisis support, or legal advice. Stop an exercise if it feels destabilizing and choose regulation, rest, or qualified support instead.</p>
+    </section>
+  </template>
+
+  <template id="modalTemplate">
+    <div class="modal-backdrop">
+      <section class="modal-card">
+        <button class="modal-close" aria-label="Close">×</button>
+        <div id="modalContent"></div>
+      </section>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
