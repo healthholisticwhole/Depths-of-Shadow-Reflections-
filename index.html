@@ -1,202 +1,48 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#151018" />
-  <meta name="description" content="Depths of Shadow Reflections — a guided self-reflection and shadow-work journal." />
-  <title>Depths of Shadow Reflections</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div>
-        <div class="brand-kicker">Depths of Shadow Reflections</div>
-        <div class="brand-sub">A private space to meet yourself</div>
-      </div>
-      <button id="installBtn" class="ghost small" hidden>Install</button>
-    </header>
-
-    <main id="view"></main>
-
-    <nav class="bottom-nav" aria-label="Primary">
-      <button data-view="home" class="nav-btn active">Home</button>
-      <button data-view="journey" class="nav-btn">Journey</button>
-      <button data-view="journal" class="nav-btn">Journal</button>
-      <button data-view="tools" class="nav-btn">Tools</button>
-      <button data-view="profile" class="nav-btn">Progress</button>
-    </nav>
-  </div>
-
-  <template id="homeTemplate">
-    <section class="hero">
-      <div class="eyebrow">Today</div>
-      <h1>Meet what is here.</h1>
-      <p class="lead">Notice without forcing. Name without judging. Understand without abandoning yourself.</p>
-      <div class="hero-actions">
-        <button class="primary" id="dailyPromptBtn">Begin today's reflection</button>
-        <button class="secondary" data-goto="grounding">Ground first</button>
-      </div>
-    </section>
-
-    <section class="grid two">
-      <article class="card">
-        <div class="card-label">Current journey</div>
-        <h2 id="homeJourneyTitle">30-Day Shadow Journey</h2>
-        <p id="homeJourneyProgress" class="muted"></p>
-        <div class="progress"><span id="homeJourneyBar"></span></div>
-        <button class="secondary wide" data-view-jump="journey">Continue journey</button>
-      </article>
-
-      <article class="card">
-        <div class="card-label">Check-in</div>
-        <h2>What is strongest right now?</h2>
-        <div id="emotionQuick" class="chip-wrap"></div>
-        <p class="muted">Choose one word. Precision can soften overwhelm.</p>
-      </article>
-    </section>
-
-    <section class="card">
-      <div class="card-label">Gentle prompt</div>
-      <h2 id="homePrompt"></h2>
-      <textarea id="homePromptText" placeholder="Write freely. Your entry stays on this device unless you choose to export it."></textarea>
-      <div class="row">
-        <button class="primary" id="saveHomePrompt">Save reflection</button>
-        <button class="ghost" id="shufflePrompt">New prompt</button>
-      </div>
-      <div id="homeSaveStatus" class="status"></div>
-    </section>
-
-    <section class="grid two">
-      <button class="feature-card" data-goto="triggers">
-        <span class="card-label">Pattern work</span>
-        <strong>Triggers & projections</strong>
-        <span>Separate activation from information.</span>
-      </button>
-      <button class="feature-card" data-goto="parts">
-        <span class="card-label">Inner dialogue</span>
-        <strong>Parts reflection</strong>
-        <span>Listen for what a protective part needs.</span>
-      </button>
-      <button class="feature-card" data-goto="boundaries">
-        <span class="card-label">Relational clarity</span>
-        <strong>Boundaries</strong>
-        <span>Find your own yes, no, maybe, and not now.</span>
-      </button>
-      <button class="feature-card" data-goto="feelings">
-        <span class="card-label">Emotional literacy</span>
-        <strong>Feelings vocabulary</strong>
-        <span>Move beyond “fine,” “bad,” or “angry.”</span>
-      </button>
-    </section>
-  </template>
-
-  <template id="journeyTemplate">
-    <section class="page-head">
-      <div class="eyebrow">Structured practice</div>
-      <h1>30-Day Shadow Journey</h1>
-      <p class="lead">A paced sequence from awareness to integration. You can move in order or revisit any day.</p>
-    </section>
-    <section class="card">
-      <div class="row between">
-        <div>
-          <div class="card-label">Progress</div>
-          <h2 id="journeyCount"></h2>
-        </div>
-        <button class="ghost small" id="resetJourney">Reset</button>
-      </div>
-      <div class="progress"><span id="journeyBar"></span></div>
-    </section>
-    <section id="journeyList" class="journey-list"></section>
-  </template>
-
-  <template id="journalTemplate">
-    <section class="page-head">
-      <div class="eyebrow">Your private record</div>
-      <h1>Journal</h1>
-      <p class="lead">Entries are saved in this browser on this device.</p>
-    </section>
-
-    <section class="card">
-      <div class="row between">
-        <h2>New entry</h2>
-        <button class="ghost small" id="exportJournal">Export</button>
-      </div>
-      <input id="journalTitle" class="input" placeholder="Optional title" />
-      <textarea id="journalText" placeholder="What wants to be heard?"></textarea>
-      <div class="row">
-        <button class="primary" id="saveJournal">Save entry</button>
-        <button class="ghost" id="clearDraft">Clear</button>
-      </div>
-      <div id="journalStatus" class="status"></div>
-    </section>
-
-    <section>
-      <div class="section-title-row">
-        <h2>Saved entries</h2>
-        <span id="entryCount" class="muted"></span>
-      </div>
-      <div id="journalList" class="journal-list"></div>
-    </section>
-  </template>
-
-  <template id="toolsTemplate">
-    <section class="page-head">
-      <div class="eyebrow">Choose what you need</div>
-      <h1>Reflection tools</h1>
-      <p class="lead">Use one tool at a time. You do not have to “dig deeper” when your system needs rest.</p>
-    </section>
-
-    <section class="tool-grid">
-      <button class="feature-card" data-goto="grounding"><span class="card-label">Regulation</span><strong>Grounding</strong><span>Orient to the present before reflecting.</span></button>
-      <button class="feature-card" data-goto="feelings"><span class="card-label">Emotional literacy</span><strong>Feelings vocabulary</strong><span>Find a word that fits more precisely.</span></button>
-      <button class="feature-card" data-goto="triggers"><span class="card-label">Pattern work</span><strong>Triggers & projections</strong><span>Explore activation with curiosity.</span></button>
-      <button class="feature-card" data-goto="parts"><span class="card-label">Inner dialogue</span><strong>Parts reflection</strong><span>Meet protective responses without shame.</span></button>
-      <button class="feature-card" data-goto="boundaries"><span class="card-label">Relational clarity</span><strong>Boundaries</strong><span>Clarify preference, consent, limits, and choice.</span></button>
-      <button class="feature-card" data-goto="integration"><span class="card-label">Close the loop</span><strong>Integration</strong><span>Turn insight into one grounded next step.</span></button>
-    </section>
-  </template>
-
-  <template id="profileTemplate">
-    <section class="page-head">
-      <div class="eyebrow">Your pace, not perfection</div>
-      <h1>Progress</h1>
-      <p class="lead">A simple snapshot of your reflection practice on this device.</p>
-    </section>
-    <section class="stats-grid">
-      <article class="stat"><strong id="statEntries">0</strong><span>journal entries</span></article>
-      <article class="stat"><strong id="statDays">0</strong><span>journey days complete</span></article>
-      <article class="stat"><strong id="statFavorites">0</strong><span>favorite prompts</span></article>
-    </section>
-    <section class="card">
-      <div class="card-label">Recent emotional words</div>
-      <div id="recentEmotions" class="chip-wrap"></div>
-    </section>
-    <section class="card">
-      <h2>Privacy & data</h2>
-      <p class="muted">This version stores your journal, journey progress, favorites, and check-ins locally in your browser. Clearing browser storage can erase them.</p>
-      <div class="row wrap">
-        <button class="secondary" id="exportAll">Export my data</button>
-        <button class="danger" id="clearAll">Erase local data</button>
-      </div>
-    </section>
-    <section class="card subtle">
-      <h2>Important</h2>
-      <p class="muted">Depths of Shadow Reflections is an educational self-reflection tool. It does not diagnose, treat, or replace therapy, medical care, crisis support, or legal advice. Stop an exercise if it feels destabilizing and choose regulation, rest, or qualified support instead.</p>
-    </section>
-  </template>
-
-  <template id="modalTemplate">
-    <div class="modal-backdrop">
-      <section class="modal-card">
-        <button class="modal-close" aria-label="Close">×</button>
-        <div id="modalContent"></div>
-      </section>
-    </div>
-  </template>
-
-  <script src="app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#120e16"><title>Depths of Shadow Reflections</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#100c13;--card:#1d1722;--line:#43364a;--ink:#faf3fb;--muted:#c8b9ca;--accent:#cda6dc;--soft:#302438}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#24152a,#100c13 38%);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}
+main{max-width:820px;margin:auto;padding:24px 16px 100px}h1,h2,h3{font-family:Georgia,serif}h1{font-size:clamp(2.6rem,10vw,4.8rem);line-height:.95;margin:.25em 0}.ey{color:var(--accent);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;font-weight:800}.lead,.muted{color:var(--muted);line-height:1.6}.card{background:rgba(29,23,34,.95);border:1px solid var(--line);border-radius:24px;padding:19px;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.btn,.chip{border:0;border-radius:999px;padding:12px 16px;font-weight:800}.btn{background:var(--accent);color:#241829}.alt{background:var(--soft);color:var(--ink)}.feature{background:#1d1722;color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:18px;text-align:left;min-height:120px}.feature strong{font-family:Georgia,serif;font-size:1.2rem;display:block;margin:7px 0}.feature span{color:var(--muted)}textarea,input{width:100%;background:#120e16;color:var(--ink);border:1px solid var(--line);border-radius:15px;padding:14px;margin:9px 0;font:inherit}textarea{min-height:140px}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{background:#302638;color:var(--ink);padding:8px 11px}.chip.on{background:var(--accent);color:#211525}.progress{height:9px;background:#302638;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;background:var(--accent)}nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(820px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:#120e16ee;border-top:1px solid var(--line);padding:8px 5px calc(8px + env(safe-area-inset-bottom));z-index:5}nav button{background:none;border:0;color:#ad9caf;font-weight:700;padding:9px 2px}nav button.on{color:#ecd9f0}.modal{position:fixed;inset:0;background:#08060acc;display:flex;align-items:flex-end;z-index:20}.sheet{background:#1b1520;border:1px solid var(--line);border-radius:28px 28px 0 0;padding:22px;width:min(820px,100%);margin:auto;max-height:90vh;overflow:auto}.day{display:flex;gap:12px;align-items:start}.num{background:#302638;border-radius:50%;min-width:40px;height:40px;display:grid;place-items:center;font-weight:800}.stat{font-size:2rem;font-family:Georgia,serif}.notice{font-size:.82rem;color:#a99baa}.top{padding:16px 0 6px}.brand{font-family:Georgia,serif;font-weight:700}.hidden{display:none!important}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style></head><body><main><header class="top"><div class="brand">Depths of Shadow Reflections</div><div class="muted">Private reflection • local-first</div></header><div id="app"></div></main>
+<nav id="nav"><button data-v="home" class="on">Home</button><button data-v="journey">Journey</button><button data-v="journal">Journal</button><button data-v="patterns">Patterns</button><button data-v="progress">Progress</button></nav>
+<script>
+const K='dsr_v3';let S=JSON.parse(localStorage.getItem(K)||'{"entries":[],"days":[],"feelings":[],"patterns":[],"onboarded":false}');
+const save=()=>localStorage.setItem(K,JSON.stringify(S));const app=document.getElementById('app');
+const feelings=["uneasy","guarded","resentful","dismissed","exposed","powerless","ashamed","conflicted","overlooked","lonely","grieving","pressured","angry","tender","relieved","hopeful","curious","steady","connected","proud"];
+const prompts=["What do I work hardest to prove about myself—and what am I afraid would be true if I stopped?","Where am I saying yes while internally feeling no?","What trait in someone else activates me most, and what might that reveal about a feared or disowned quality in me?","What role do I enter under stress: pleaser, fixer, critic, achiever, withdrawer, controller, rescuer, or something else?","What do I already know but keep asking other people to decide for me?","What emotion do I judge myself for feeling, and what information might it carry?","What do I secretly envy, and what unlived desire might it reveal?"];
+const days=Array.from({length:30},(_,i)=>({t:["Awareness","Activation","Projection","Protection","Shame","Perfection","Anger","Envy","People-pleasing","The hidden no","Over-explaining","Control","Inner critic","Softness","Agency","Identity roles","Inherited rules","Guilt vs responsibility","Conflict patterns","Complexity","Grief","Desire","Belonging","Rejection","Values","Boundaries","Self-trust","Integration","Balanced opposites","Closing reflection"][i],p:["What are you quickest to judge in others?","Recall a strong reaction. What happened in your body first?","What quality are you assigning to someone else? Do you fear or suppress any version of it in yourself?","What is your reaction trying to protect?","What do you hide because you fear it changes how others see you?","What would happen if you were adequate instead of exceptional?","What boundary, value, grief, or injustice might anger signal?","What desire does envy reveal?","Where are you managing another person's feelings at your expense?","Where does your body say no before your mouth says yes?","What are you trying to secure when you over-explain?","What uncertainty are you trying to eliminate?","Whose tone or standards does your critic resemble?","Where have you confused tenderness with weakness?","What does healthy power look like without domination?","Who are you when you are not useful, impressive, agreeable, needed, or right?","Which inherited rule no longer fits?","What is actually yours to carry?","What pattern appears when conflict begins?","Name two truths that can coexist.","What loss have you minimized?","What do you want before editing it into acceptability?","Where do you perform to remain included?","What would rejection seem to prove—and is that conclusion inevitable?","Which three values should your choices demonstrate?","What respectful limit would protect your integrity?","What do you know beneath the search for reassurance?","What insight is ready to become behavior?","Which disowned quality could return in a balanced form?","What have you learned about patterns, protectors, needs, values, and choices?"][i]}));
+function nav(v){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));render(v)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>nav(b.dataset.v));
+function render(v){
+ if(v==='home')home();if(v==='journey')journey();if(v==='journal')journal();if(v==='patterns')patterns();if(v==='progress')progress();
+ scrollTo(0,0)
+}
+function home(){let p=prompts[Math.floor(Math.random()*prompts.length)];app.innerHTML=`<section><div class="ey">Today</div><h1>Go beneath the reaction.</h1><p class="lead">A structured space for noticing patterns, reclaiming disowned qualities, and choosing what comes next.</p></section>
+<div class="card"><div class="ey">Daily reflection</div><h2>${p}</h2><textarea id="d" placeholder="Write without editing yourself."></textarea><button class="btn" id="sv">Save reflection</button></div>
+<div class="card"><div class="ey">Emotional check-in</div><h2>Name it precisely</h2><div class="chips">${feelings.map(x=>`<button class="chip" data-f="${x}">${x}</button>`).join('')}</div></div>
+<div class="grid"><button class="feature" onclick="tool('projection')"><div class="ey">Shadow lens</div><strong>Projection Mapper</strong><span>Separate facts, interpretation, activation, and projection.</span></button><button class="feature" onclick="tool('parts')"><div class="ey">Inner dialogue</div><strong>Protector / Part</strong><span>Explore what a recurring response is trying to do for you.</span></button><button class="feature" onclick="tool('boundary')"><div class="ey">Relational clarity</div><strong>Boundary Builder</strong><span>Find your preference, limit, responsibility, and next action.</span></button><button class="feature" onclick="tool('ground')"><div class="ey">Regulation</div><strong>Ground First</strong><span>Orient to the present before going deeper.</span></button></div>
+<div class="card"><div class="ey">Privacy by design</div><p class="muted">Your reflections stay in this browser on this device in this version. No account, ads, analytics, or third-party tracking SDKs are included.</p></div>`;
+ document.getElementById('sv').onclick=()=>{let t=d.value.trim();if(t){S.entries.unshift({id:Date.now(),title:'Daily reflection',text:t,prompt:p,ts:Date.now()});save();d.value='';alert('Saved on this device.')}};
+ document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{b.classList.toggle('on');S.feelings.unshift({w:b.dataset.f,ts:Date.now()});S.feelings=S.feelings.slice(0,50);save()})
+}
+function journey(){app.innerHTML=`<div class="ey">Structured practice</div><h1>30-Day Journey</h1><p class="lead">${S.days.length} of 30 complete.</p><div class="progress"><i style="width:${S.days.length/30*100}%"></i></div>${days.map((x,i)=>`<div class="card day"><div class="num">${i+1}</div><div><div class="ey">${x.t}</div><h3>${x.p}</h3><button class="btn alt" onclick="day(${i})">${S.days.includes(i)?'Completed • revisit':'Open day'}</button></div></div>`).join('')}`}
+function day(i){sheet(`<div class="ey">Day ${i+1} • ${days[i].t}</div><h2>${days[i].p}</h2><textarea id="jt" placeholder="What comes up?"></textarea><button class="btn" id="jd">Save & complete</button>`,()=>jd.onclick=()=>{if(jt.value.trim())S.entries.unshift({id:Date.now(),title:`Journey Day ${i+1}: ${days[i].t}`,text:jt.value.trim(),prompt:days[i].p,ts:Date.now()});if(!S.days.includes(i))S.days.push(i);save();closeSheet();journey()})}
+function journal(){app.innerHTML=`<div class="ey">Private record</div><h1>Journal</h1><div class="card"><input id="title" placeholder="Optional title"><textarea id="text" placeholder="What wants to be heard?"></textarea><button class="btn" id="add">Save entry</button> <button class="btn alt" id="exp">Export</button></div>${S.entries.length?S.entries.map(e=>`<div class="card"><div class="ey">${new Date(e.ts).toLocaleString()}</div><h2>${e.title}</h2>${e.prompt?`<p class="muted">${e.prompt}</p>`:''}<p style="white-space:pre-wrap">${e.text}</p><button class="btn alt" onclick="del(${e.id})">Delete</button></div>`).join(''):'<div class="card muted">No entries yet.</div>'}`;
+ add.onclick=()=>{if(text.value.trim()){S.entries.unshift({id:Date.now(),title:title.value.trim()||'Reflection',text:text.value.trim(),ts:Date.now()});save();journal()}};exp.onclick=()=>download()}
+function del(id){if(confirm('Delete this entry?')){S.entries=S.entries.filter(e=>e.id!==id);save();journal()}}
+function patterns(){app.innerHTML=`<div class="ey">Pattern intelligence</div><h1>Map what repeats.</h1><p class="lead">Record recurring triggers without turning them into fixed labels about yourself or another person.</p>
+<div class="card"><input id="trig" placeholder="Trigger / situation"><input id="body" placeholder="Body sensation"><input id="story" placeholder="Immediate story or interpretation"><input id="need" placeholder="Need, value, or boundary underneath"><button class="btn" id="ps">Save pattern</button></div>
+${S.patterns.map(x=>`<div class="card"><div class="ey">${new Date(x.ts).toLocaleDateString()}</div><h2>${x.trig}</h2><p><b>Body:</b> ${x.body}</p><p><b>Story:</b> ${x.story}</p><p><b>Underneath:</b> ${x.need}</p></div>`).join('')}`;
+ps.onclick=()=>{if(trig.value.trim()){S.patterns.unshift({trig:trig.value,body:body.value,story:story.value,need:need.value,ts:Date.now()});save();patterns()}}}
+function progress(){let recent=[...new Set(S.feelings.map(x=>x.w))].slice(0,12);app.innerHTML=`<div class="ey">Your pace, not perfection</div><h1>Progress</h1><div class="grid"><div class="card"><div class="stat">${S.entries.length}</div><div class="muted">journal entries</div></div><div class="card"><div class="stat">${S.days.length}</div><div class="muted">journey days</div></div><div class="card"><div class="stat">${S.patterns.length}</div><div class="muted">patterns mapped</div></div></div><div class="card"><h2>Recent feeling words</h2><div class="chips">${recent.map(x=>`<span class="chip">${x}</span>`).join('')||'<span class="muted">No check-ins yet.</span>'}</div></div><div class="card"><h2>Data controls</h2><p class="muted">Export a backup before clearing browser data.</p><button class="btn alt" onclick="download()">Export my data</button> <button class="btn alt" onclick="erase()">Erase local data</button></div><div class="card"><h2>About & safety</h2><p class="muted">This app supports education and self-reflection. It does not diagnose or treat mental-health conditions and is not therapy, medical care, crisis support, or legal advice. Stop an exercise if it feels destabilizing.</p><button class="btn alt" onclick="privacy()">Privacy policy</button></div>`}
+function tool(k){let c={projection:['Projection Mapper','1. What objectively happened?\\n2. What did I interpret it to mean?\\n3. What emotion/body response appeared?\\n4. What quality am I assigning to the other person?\\n5. Do I fear, reject, envy, or suppress any version of that quality in myself?\\n6. What evidence complicates my first interpretation?'],parts:['Protector / Part Reflection','Name the recurring stance: critic, pleaser, fixer, achiever, avoider, protector, controller, performer, or your own word.\\n\\nAsk: What are you afraid would happen if you stopped doing this job? What are you protecting? What do you need from my present-day self?'],boundary:['Boundary Builder','What is my preference?\\nWhat is my limit?\\nWhat is mine to communicate or act on?\\nWhat belongs to the other person?\\nWhat is one clear sentence I can use?'],ground:['Ground First','Look around and name 5 neutral things you see. Feel the support beneath your body. Notice 3 sounds. Let the exhale become slightly longer without forcing it. Ask: What would make this reflection feel 5% safer?']}[k];sheet(`<div class="ey">Reflection tool</div><h2>${c[0]}</h2><p class="lead" style="white-space:pre-wrap">${c[1]}</p>`)}
+function sheet(h,cb){document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="modal" onclick="if(event.target===this)closeSheet()"><div class="sheet"><button class="btn alt" onclick="closeSheet()">Close</button>${h}</div></div>`);if(cb)cb()}
+function closeSheet(){modal?.remove()}function download(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));a.download='depths-shadow-reflections-backup.json';a.click()}
+function erase(){if(confirm('Erase all locally stored app data?')){localStorage.removeItem(K);location.reload()}}
+function privacy(){sheet(`<div class="ey">Privacy Policy</div><h2>Depths of Shadow Reflections</h2><p class="muted">Effective August 23, 2026</p><p>This version is designed as a local-first reflection app. Journal entries, feeling check-ins, journey progress, and pattern maps are stored locally in your browser/device. The app itself does not include advertising, analytics, account creation, or third-party tracking SDKs and does not intentionally transmit journal content to the developer.</p><p>You may export your local data or erase it from the Progress screen. Clearing app/browser storage may also erase locally stored data.</p><p>For Google Play publication, the developer's public contact information and final hosted privacy-policy URL must be added before submission.</p><p class="notice">This policy must be updated if future versions add cloud sync, accounts, analytics, AI services, payments, advertising, or other data collection.</p>`)}
+render('home');
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>

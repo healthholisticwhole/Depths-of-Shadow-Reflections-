@@ -4,8 +4,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#100d13",
-  "theme_color": "#151018",
-  "description": "A guided self-reflection and shadow-work journal.",
-  "icons": []
+  "background_color": "#100c13",
+  "theme_color": "#120e16",
+  "description": "A private, structured shadow-work and self-reflection journal."
 }
