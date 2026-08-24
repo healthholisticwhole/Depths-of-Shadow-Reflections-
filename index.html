@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17131d">
+<title>Depths of Shadow Reflections</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#110f15;--card:#1d1923;--ink:#f5eff7;--muted:#c9bdcc;--accent:#c8a6d7;--line:#403548}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#110f15,#1a1420);color:var(--ink);min-height:100vh}
+main{max-width:760px;margin:auto;padding:28px 18px 60px}.hero{padding:38px 6px 22px}.eyebrow{letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-size:.78rem}
+h1{font-family:Georgia,serif;font-size:clamp(2.3rem,9vw,4.7rem);line-height:.96;margin:.35em 0}.lead{color:var(--muted);font-size:1.08rem;line-height:1.6}
+.grid{display:grid;gap:14px}.card{background:rgba(29,25,35,.94);border:1px solid var(--line);border-radius:22px;padding:20px}
+h2{font-family:Georgia,serif;margin:0 0 10px}button{border:0;border-radius:999px;padding:12px 17px;font-weight:700;background:var(--accent);color:#211827}
+.secondary{background:#302838;color:var(--ink)}textarea{width:100%;min-height:130px;background:#151119;color:var(--ink);border:1px solid var(--line);border-radius:15px;padding:14px;font:inherit;resize:vertical}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pill{background:#302838;border-radius:999px;padding:7px 11px;color:#eadfed;font-size:.9rem}
+.prompt{font-size:1.15rem;line-height:1.5;margin:12px 0 18px}.tiny{font-size:.8rem;color:#a99dab;line-height:1.5}.saved{color:#cde6c7;margin-left:8px}
+nav{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+</style>
+</head>
+<body><main>
+<section class="hero"><div class="eyebrow">A private space to meet yourself</div>
+<h1>Depths of Shadow Reflections</h1>
+<p class="lead">Explore the parts of yourself that are easy to hide, silence, judge, or protect. Move gently—from noticing, to naming, to understanding, to choosing.</p>
+<nav><button onclick="newPrompt()">Begin a reflection</button><button class="secondary" onclick="document.getElementById('ground').scrollIntoView()">Ground first</button></nav>
+</section>
+
+<div class="grid">
+<section class="card">
+<div class="eyebrow">Today's reflection</div><h2>What wants to be understood?</h2>
+<div id="prompt" class="prompt"></div>
+<textarea id="journal" placeholder="Write without editing yourself. Your entry stays in this browser on this device."></textarea>
+<p><button onclick="saveEntry()">Save reflection</button><span id="saved" class="saved"></span></p>
+<p class="tiny">Privacy note: this prototype stores journal text locally in your browser using localStorage; it is not sent to a server by this app.</p>
+</section>
+
+<section class="card">
+<div class="eyebrow">Name it more precisely</div><h2>Expand the feeling</h2>
+<p class="lead">Instead of only “good,” “bad,” “angry,” or “sad,” try a closer word.</p>
+<div class="pills"><span class="pill">uneasy</span><span class="pill">dismissed</span><span class="pill">guarded</span><span class="pill">resentful</span><span class="pill">exposed</span><span class="pill">powerless</span><span class="pill">longing</span><span class="pill">relieved</span><span class="pill">tender</span><span class="pill">hopeful</span></div>
+</section>
+
+<section class="card" id="ground">
+<div class="eyebrow">Regulate before exploring</div><h2>60-second grounding</h2>
+<p class="prompt">Feel the support beneath your body. Look around and name 5 neutral things you can see. Notice 3 sounds. Let your exhale become a little longer than your inhale. Ask: “What would make this reflection feel 5% safer?”</p>
+</section>
+
+<section class="card">
+<div class="eyebrow">Boundaries & relational patterns</div><h2>Separate signal from pressure</h2>
+<p class="prompt">What do I actually think, feel, remember, want, or need when I temporarily set aside another person's approval, disappointment, urgency, blame, or expectations?</p>
+<p class="tiny">This tool is for reflection and education, not diagnosis, therapy, crisis care, or a substitute for professional advice.</p>
+</section>
+
+<section class="card">
+<div class="eyebrow">Integration</div><h2>Close with choice</h2>
+<p class="prompt">What is this part trying to protect? What does it need from my present-day self? What is one small action that honors the message without letting the reaction run my life?</p>
+</section>
+</div>
+</main>
+<script>
+const prompts=[
+"What trait in someone else activates me most—and where might I fear, reject, or suppress some version of it in myself?",
+"What do I work hardest to prove about myself? What am I afraid would be true if I stopped proving it?",
+"When I feel misunderstood, what story do I immediately tell myself about the other person—and about me?",
+"What emotion do I judge myself most harshly for feeling? What might that emotion be trying to communicate?",
+"Where am I saying yes while internally feeling no? What makes the no difficult to express?",
+"What part of me only appears when I feel threatened, criticized, excluded, controlled, or powerless? What is it protecting?",
+"What quality did I learn was unacceptable to show? How could I reclaim its healthy form?",
+"What am I ready to see with curiosity rather than shame?"
+];
+function newPrompt(){document.getElementById('prompt').textContent=prompts[Math.floor(Math.random()*prompts.length)];document.getElementById('saved').textContent='';}
+function saveEntry(){localStorage.setItem('shadowJournal',document.getElementById('journal').value);localStorage.setItem('shadowPrompt',document.getElementById('prompt').textContent);document.getElementById('saved').textContent='Saved on this device';}
+window.onload=()=>{newPrompt();let j=localStorage.getItem('shadowJournal');if(j)document.getElementById('journal').value=j;let p=localStorage.getItem('shadowPrompt');if(p)document.getElementById('prompt').textContent=p;}
+</script></body></html>

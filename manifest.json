@@ -1,0 +1,9 @@
+{
+  "name": "Depths of Shadow Reflections",
+  "short_name": "Shadow Reflections",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#110f15",
+  "theme_color": "#17131d",
+  "description": "A guided shadow-work and self-reflection app."
+}
